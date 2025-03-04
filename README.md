@@ -33,7 +33,7 @@ class EmailService {
 ```
 In the improved example, User is only responsible for user creation, and EmailService is responsible for sending emails.
 
-** 2.Open/Closed Principle (OCP) Software entities (classes, modules, functions, etc.) should be open for extension but closed for modification.**
+**2.Open/Closed Principle (OCP) Software entities (classes, modules, functions, etc.) should be open for extension but closed for modification.**
 
 Bad example:
 ```java
@@ -121,7 +121,7 @@ class Ostrich extends Bird {
 ```
 Instead of forcing Ostrich to implement a fly method that it cannot fulfill, the hierarchy is adjusted to separate flying and non-flying birds.
 
-**4. Interface Segregation Principle (ISP) A client should not be forced to depend on methods it does not use.
+**4.Interface Segregation Principle (ISP) A client should not be forced to depend on methods it does not use.
 
 Bad example:
 ```java
@@ -183,7 +183,7 @@ class Robot implements Workable {
 ```
 The Worker interface is split into Workable and Eatable, allowing Robot to implement only the Workable interface.
 
-**5. Dependency Inversion Principle (DIP) High-level modules should not depend on low-level modules. Both should depend on abstractions. Abstractions should not depend on details. Details should depend on abstractions.**
+**5.Dependency Inversion Principle (DIP) High-level modules should not depend on low-level modules. Both should depend on abstractions. Abstractions should not depend on details. Details should depend on abstractions.**
 
 Bad example:
 ```java
