@@ -8,7 +8,7 @@ The SOLID principles are a set of five design principles intended to make softwa
 **1. Single Responsibility Principle (SRP) A class should have only one reason to change.**
 
 Bad example:
-
+```java
 class User {
     public void createUser(String name, String email) {
         // Logic to create a user
@@ -17,7 +17,7 @@ class User {
         // Logic to send an email
     }
 }
-
+```
 Good example:
 
 class User {
