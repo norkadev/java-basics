@@ -87,7 +87,7 @@ class AreaCalculator {
 ```
 The AreaCalculator now depends on an abstraction (Shape) and can work with any class that implements the Shape interface without modification.
 
-**3.Liskov Substitution Principle (LSP) Subtypes must be substitutable for their base types without altering the correctness of the program.
+**3.Liskov Substitution Principle (LSP) Subtypes must be substitutable for their base types without altering the correctness of the program.**
 
 Bad example:
 ```java
@@ -121,8 +121,7 @@ class Ostrich extends Bird {
 ```
 Instead of forcing Ostrich to implement a fly method that it cannot fulfill, the hierarchy is adjusted to separate flying and non-flying birds.
 
-**4.Interface Segregation Principle (ISP) A client should not be forced to depend on methods it does not use.
-**
+**4.Interface Segregation Principle (ISP) A client should not be forced to depend on methods it does not use.**
 Bad example:
 ```java
 interface Worker {
