@@ -243,7 +243,7 @@ The Switch class depends on the Switchable abstraction, not the concrete LightBu
 In Java, the order of execution for initialization blocks and constructors is as follows:
 
 1. **Static Initialization Blocks:** These are executed only once when the class is first loaded into memory. They are used to initialize static variables.
-2.** Instance Initialization Blocks:** These are executed every time an object of the class is created, before the constructor.
+2. **Instance Initialization Blocks:** These are executed every time an object of the class is created, before the constructor.
 3. **Constructors**: These are executed after the instance initialization blocks, and they are used to initialize the object's state.
 Here's an example to illustrate this:
  ```java
@@ -292,3 +292,139 @@ The main method starts execution.
 The static initialization block is executed only once when MyClass is first loaded.
 When new MyClass() is called for obj1, the instance initialization block is executed, followed by the constructor.
 When new MyClass() is called for obj2, the instance initialization block is executed again, followed by the constructor. The static initialization block is not executed again because it has already been executed when the class was first loaded
+
+# Differences between Lambda Expressions and Closures in Java.
+Lambda expressions and closures are related concepts, but they have some key differences in Java.
+
+**Lambda Expressions**
+**Definition:** A lambda expression is a concise way to represent an anonymous function. It's essentially a shorthand for creating an instance of a functional interface.
+Syntax: ```(parameters) -> expression``` or ```(parameters) -> { statements; }```
+
+**Usage:** Lambda expressions are used to provide the implementation for functional interfaces (interfaces with a single abstract method).
+
+**Scope:** Lambda expressions can access variables from the enclosing scope. However, they can only access final or effectively final variables (variables whose values do not change after initialization).
+Example:
+```java
+interface MyFunctionalInterface {
+    int operation(int a, int b);
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Lambda expression to add two numbers
+        MyFunctionalInterface addition = (a, b) -> a + b;
+        System.out.println(addition.operation(5, 3)); // Output: 8
+
+        int factor = 2; // Effectively final variable
+        // Lambda expression to multiply a number by a factor
+        MyFunctionalInterface multiplication = (a, b) -> a * b * factor;
+        System.out.println(multiplication.operation(5, 3)); // Output: 30
+    }
+}
+```
+**Closures**
+**Definition:** A closure is a function that captures variables from its surrounding scope and "closes over" them, allowing the function to access and manipulate those variables even after the outer scope has exited.
+**Java's Approximation:** Java's lambda expressions provide a limited form of closure. They can capture variables from the enclosing scope, but with the restriction that these variables must be final or effectively final.
+**Mutability:** In a true closure (like in JavaScript or Python), the captured variables can be modified within the closure, and these changes are reflected in the outer scope. Java does not allow this; it only allows access to effectively final variables, preventing modification.
+Example demonstrating the difference:
+```
+public class ClosureExample {
+    public static void main(String[] args) {
+        int number = 10;
+
+        // Lambda expression capturing 'number' (must be effectively final)
+        Runnable incrementer = () -> {
+            // number++; // This would cause a compilation error
+            System.out.println("Number: " + number);
+        };
+
+        incrementer.run(); // Output: Number: 10
+    }
+}
+```
+# Final and Effectively Final variables
+A **final** variable in Java is a variable whose value cannot be changed once it has been assigned. An **effectively final** variable is a variable that is not explicitly declared as final, but its value is never changed after initialization. **Lambda expressions** and anonymous classes can only access final or effectively final local variables from their enclosing scope.
+
+A **final variable** must be initialized when it is declared or within the constructor of the class. Once initialized, its value cannot be changed.
+Example
+```
+class FinalExample {
+    private final int value; // Declared as final
+
+    public FinalExample(int value) {
+        this.value = value; // Initialized in the constructor
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public static void main(String[] args) {
+        FinalExample obj = new FinalExample(10);
+        System.out.println(obj.getValue()); // Output: 10
+
+        // obj.value = 20; // This would cause a compilation error because value is final
+    }
+}
+```
+# Enclosing Scope
+The enclosing scope refers to the region of code where a variable or expression is defined. It determines the visibility and accessibility of variables within that region. In the context of lambda expressions and anonymous classes in Java, the enclosing scope is particularly important because it defines which variables can be accessed from within the lambda or anonymous class.
+
+
+Types of Enclosing Scopes
+**Class Scope:** Variables declared within a class (fields) have class scope. They are accessible to all methods and blocks within the class.
+
+**Method Scope:** Variables declared within a method have method scope. They are accessible only within that method.
+
+**Block Scope:** Variables declared within a block (e.g., inside an if statement, for loop, or any {}) have block scope. They are accessible only within that block.
+
+**Lambda Expression/Anonymous Class Scope:** Lambda expressions and anonymous classes create their own scope, but they can also access variables from their enclosing scope.
+
+# How Enclosing Scope Works with Lambdas and Anonymous Classes
+**Demonstrating the Effectively Final Requirement:**
+```java
+public class EnclosingScopeMutationExample {
+    public static void main(String[] args) {
+        int counter = 0; // Initially 0
+
+        // Attempting to modify 'counter' inside the lambda
+        Runnable incrementer = () -> {
+            // counter++; // This will cause a compilation error
+            System.out.println("Counter: " + counter);
+        };
+
+        // counter++; // This will cause a compilation error because 'counter' is no longer effectively final
+        incrementer.run();
+    }
+}
+```
+**Accessing Class-Level Variables (Fields):**
+Class-level variables (fields) can be accessed and modified within lambda expressions without needing to be final or effectively final, because they are not local variables in the enclosing method or block.
+```java
+public class EnclosingScopeClassExample {
+    private int instanceVariable = 30; // Class-level variable
+
+    public void myMethod() {
+        Runnable runnable = () -> {
+            System.out.println("Instance Variable: " + instanceVariable); // Accessing class-level variable
+        };
+        runnable.run(); // Output: Instance Variable: 30
+    }
+
+    public static void main(String[] args) {
+        EnclosingScopeClassExample obj = new EnclosingScopeClassExample();
+        obj.myMethod();
+    }
+}
+```
+**Summary**
+The enclosing scope is the region of code where a variable is defined, determining its visibility.
+
+Lambda expressions and anonymous classes can access variables from their enclosing scope.
+
+Local variables from the enclosing scope must be final or effectively final to be accessed within lambda expressions and anonymous classes.
+
+Class-level variables (fields) can be accessed and modified without being final or effectively final.
+
+
+
