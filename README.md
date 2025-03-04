@@ -2,54 +2,48 @@
  Basic java concepts with examples
 
  # SOLID Principle
- The SOLID principles are a set of five design principles intended to make software designs more understandable, flexible, and maintainable. Here's an explanation of each principle with Java examples:
+The SOLID principles are a set of five design principles intended to make software designs more understandable, flexible, and maintainable. Here's an explanation of each principle with Java examples:
 
 
-Single Responsibility Principle (SRP) A class should have only one reason to change.
+**1. Single Responsibility Principle (SRP) A class should have only one reason to change.**
 
 Bad example:
-
 
 class User {
     public void createUser(String name, String email) {
         // Logic to create a user
     }
-
     public void sendEmail(String email, String message) {
         // Logic to send an email
     }
 }
-Good example:
 
+Good example:
 
 class User {
     public void createUser(String name, String email) {
         // Logic to create a user
     }
 }
-
 class EmailService {
     public void sendEmail(String email, String message) {
         // Logic to send an email
     }
 }
+
 In the improved example, User is only responsible for user creation, and EmailService is responsible for sending emails.
 
-
-Open/Closed Principle (OCP) Software entities (classes, modules, functions, etc.) should be open for extension but closed for modification.
+** 2.Open/Closed Principle (OCP) Software entities (classes, modules, functions, etc.) should be open for extension but closed for modification.**
 
 Bad example:
-
 
 class Rectangle {
     public double width;
     public double height;
 }
-
 class Circle {
     public double radius;
 }
-
 class AreaCalculator {
     public double calculateArea(Object shape) {
         if (shape instanceof Rectangle) {
@@ -62,23 +56,21 @@ class AreaCalculator {
         return 0;
     }
 }
-Good example:
 
+Good example:
 
 interface Shape {
     double calculateArea();
 }
-
 class Rectangle implements Shape {
     public double width;
     public double height;
-
+   
     @Override
     public double calculateArea() {
         return width * height;
     }
 }
-
 class Circle implements Shape {
     public double radius;
 
@@ -87,63 +79,56 @@ class Circle implements Shape {
         return Math.PI * radius * radius;
     }
 }
-
 class AreaCalculator {
     public double calculateArea(Shape shape) {
         return shape.calculateArea();
     }
 }
+
 The AreaCalculator now depends on an abstraction (Shape) and can work with any class that implements the Shape interface without modification.
 
-
-Liskov Substitution Principle (LSP) Subtypes must be substitutable for their base types without altering the correctness of the program.
+**3.Liskov Substitution Principle (LSP) Subtypes must be substitutable for their base types without altering the correctness of the program.
 
 Bad example:
-
 
 class Bird {
     public void fly() {
         System.out.println("Bird is flying");
     }
 }
-
 class Ostrich extends Bird {
     @Override
     public void fly() {
         throw new UnsupportedOperationException("Ostrich cannot fly");
     }
 }
-Good example:
 
+Good example:
 
 class Bird {
     public void eat() {
         System.out.println("Bird is eating");
     }
 }
-
 class FlyingBird extends Bird {
     public void fly() {
         System.out.println("Bird is flying");
     }
 }
-
 class Ostrich extends Bird {
     // Ostriches eat, but they don't fly
 }
+
 Instead of forcing Ostrich to implement a fly method that it cannot fulfill, the hierarchy is adjusted to separate flying and non-flying birds.
 
-
-Interface Segregation Principle (ISP) A client should not be forced to depend on methods it does not use.
+**4. Interface Segregation Principle (ISP) A client should not be forced to depend on methods it does not use.
 
 Bad example:
-
 
 interface Worker {
     void work();
     void eat();
 }
-
 class Human implements Worker {
     @Override
     public void work() {
@@ -155,7 +140,6 @@ class Human implements Worker {
         System.out.println("Human is eating");
     }
 }
-
 class Robot implements Worker {
     @Override
     public void work() {
@@ -168,8 +152,8 @@ class Robot implements Worker {
         throw new UnsupportedOperationException("Robot cannot eat");
     }
 }
-Good example:
 
+Good example:
 
 interface Workable {
     void work();
@@ -190,20 +174,18 @@ class Human implements Workable, Eatable {
         System.out.println("Human is eating");
     }
 }
-
 class Robot implements Workable {
     @Override
     public void work() {
         System.out.println("Robot is working");
     }
 }
+
 The Worker interface is split into Workable and Eatable, allowing Robot to implement only the Workable interface.
 
-
-Dependency Inversion Principle (DIP) High-level modules should not depend on low-level modules. Both should depend on abstractions. Abstractions should not depend on details. Details should depend on abstractions.
+**5. Dependency Inversion Principle (DIP) High-level modules should not depend on low-level modules. Both should depend on abstractions. Abstractions should not depend on details. Details should depend on abstractions.**
 
 Bad example:
-
 
 class LightBulb {
     public void turnOn() {
@@ -214,7 +196,6 @@ class LightBulb {
         System.out.println("LightBulb is off");
     }
 }
-
 class Switch {
     private LightBulb bulb;
 
@@ -226,14 +207,13 @@ class Switch {
         bulb.turnOn();
     }
 }
-Good example:
 
+Good example:
 
 interface Switchable {
     void turnOn();
     void turnOff();
 }
-
 class LightBulb implements Switchable {
     @Override
     public void turnOn() {
@@ -245,7 +225,6 @@ class LightBulb implements Switchable {
         System.out.println("LightBulb is off");
     }
 }
-
 class Switch {
     private Switchable device;
 
@@ -257,4 +236,5 @@ class Switch {
         device.turnOn();
     }
 }
+
 The Switch class depends on the Switchable abstraction, not the concrete LightBulb class.
