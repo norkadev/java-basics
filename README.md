@@ -237,3 +237,57 @@ class Switch {
 }
 ```
 The Switch class depends on the Switchable abstraction, not the concrete LightBulb class.
+
+# Order of execution of Initialization blocks and Constructors in Java.
+In Java, the order of execution for initialization blocks and constructors is as follows:
+
+1. Static Initialization Blocks: These are executed only once when the class is first loaded into memory. They are used to initialize static variables.
+2. Instance Initialization Blocks: These are executed every time an object of the class is created, before the constructor.
+3. Constructors: These are executed after the instance initialization blocks, and they are used to initialize the object's state.
+Here's an example to illustrate this:
+ ```java
+class MyClass {
+    // Static initialization block
+    static {
+        System.out.println("Static initialization block");
+        staticVariable = 10;
+    }
+
+    // Instance initialization block
+    {
+        System.out.println("Instance initialization block");
+        instanceVariable = 20;
+    }
+
+    // Static variable
+    static int staticVariable;
+
+    // Instance variable
+    int instanceVariable;
+
+    // Constructor
+    public MyClass() {
+        System.out.println("Constructor");
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Main method");
+        MyClass obj1 = new MyClass();
+        MyClass obj2 = new MyClass();
+    }
+}
+```
+Output:
+```java
+Main method
+Static initialization block
+Instance initialization block
+Constructor
+Instance initialization block
+Constructor
+```
+Explanation:
+The main method starts execution.
+The static initialization block is executed only once when MyClass is first loaded.
+When new MyClass() is called for obj1, the instance initialization block is executed, followed by the constructor.
+When new MyClass() is called for obj2, the instance initialization block is executed again, followed by the constructor. The static initialization block is not executed again because it has already been executed when the class was first loaded
