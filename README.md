@@ -1,4 +1,4 @@
-# java-basics
+# Java  Basics
  Basic java concepts with examples
 
  # SOLID Principle
