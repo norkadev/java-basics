@@ -574,4 +574,217 @@ public class Main {
   
 In most modern Java development, lambda expressions are generally preferred for simple, single-method implementations due to their conciseness and readability. However, anonymous classes still have their place in more complex scenarios.
 
+# Give the list of Java Object class methods.
+The Object class in Java is the root of the class hierarchy. Every class in Java directly or indirectly inherits from the Object class. Here's a list of the commonly used methods in the Object class with examples:
 
+1. equals(Object obj): Compares two objects for equality. The default implementation checks if the two objects are the same instance.
+
+2. hashCode(): Returns a hash code value for the object. It is used by hash-based collections like HashMap and HashSet. If two objects are equal according to the equals(Object) method, then calling the hashCode method on each of the two objects must produce the same integer result.
+
+```java
+import java.util.Objects;
+
+class MyClass {
+    int value;
+
+    public MyClass(int value) {
+        this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        MyClass myClass = (MyClass) obj;
+        return value == myClass.value;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        MyClass obj1 = new MyClass(5);
+        MyClass obj2 = new MyClass(5);
+
+        System.out.println(obj1.hashCode()); // Output: (some hash code)
+        System.out.println(obj2.hashCode()); // Output: (same hash code as obj1)
+    }
+}
+```
+3. toString(): Returns a string representation of the object. The default implementation returns a string consisting of the class name of which the object is an instance, the at-sign character `@', and the unsigned hexadecimal representation of the hash code of the object.
+4. getClass(): Returns the runtime class of the object. This is useful for obtaining information about the object's type at runtime.
+5. clone(): Creates and returns a copy of the object. The class must implement the Cloneable interface to use this method.
+```java
+   class MyClass implements Cloneable {
+    int value;
+
+    public MyClass(int value) {
+        this.value = value;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) throws CloneNotSupportedException {
+        MyClass obj1 = new MyClass(5);
+        MyClass obj2 = (MyClass) obj1.clone();
+
+        System.out.println(obj1.value); // Output: 5
+        System.out.println(obj2.value); // Output: 5
+    }
+}
+```
+6. finalize(): Called by the garbage collector when it determines that there are no more references to the object. It is used to perform cleanup operations. Note: This method is discouraged and can be unreliable.
+```java
+   class MyClass {
+    @Override
+    protected void finalize() throws Throwable {
+        System.out.println("Finalize method called");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        MyClass obj = new MyClass();
+        obj = null; // Make the object eligible for garbage collection
+        System.gc(); // Suggest garbage collection (not guaranteed)
+    }
+}
+```
+7. notify(), notifyAll(), wait(): These methods are used for thread synchronization. wait() causes the current thread to wait until another thread invokes notify() or notifyAll() for the object. notify() wakes up a single thread that is waiting on the object's monitor. notifyAll() wakes up all threads that are waiting on the object's monitor.
+```java
+   public class Main {
+    public static void main(String[] args) {
+        Object lock = new Object();
+
+        Thread t1 = new Thread(() -> {
+            synchronized (lock) {
+                try {
+                    System.out.println("Thread 1: Waiting");
+                    lock.wait();
+                    System.out.println("Thread 1: Resumed");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        Thread t2 = new Thread(() -> {
+            synchronized (lock) {
+                System.out.println("Thread 2: Notifying");
+                lock.notify();
+            }
+        });
+
+        t1.start();
+        try {
+            Thread.sleep(1000); // Ensure t1 waits first
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        t2.start();
+    }
+}
+```
+Output
+```
+Thread 1: Waiting
+Thread 2: Notifying
+Thread 1: Resumed
+```
+
+# What is the difference between atomic, volatile, synchronized?
+**volatile**
+Purpose: Ensures visibility of changes to variables across threads.
+Mechanism: When a variable is declared volatile, the Java Memory Model (JMM) ensures that any write to the variable by one thread is immediately visible to other threads.
+
+Use Case: Useful when you need to ensure that multiple threads see the most up-to-date value of a variable without using locks.
+
+Limitations:
+
+Does not provide atomicity for compound operations (e.g., incrementing a variable).
+
+Only guarantees visibility, not mutual exclusion.
+```java
+class VolatileExample {
+    private volatile boolean running = true;
+
+    public void stop() {
+        running = false;
+    }
+
+    public void run() {
+        while (running) {
+            // Do something
+        }
+        System.out.println("Thread stopped");
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        VolatileExample example = new VolatileExample();
+        Thread thread = new Thread(example::run);
+        thread.start();
+
+        Thread.sleep(100);
+        example.stop(); // This will eventually stop the thread
+        thread.join();
+    }
+}
+```
+**synchronized**
+Purpose: Provides both mutual exclusion (atomicity) and visibility.
+
+Mechanism: When a method or block of code is synchronized, only one thread can execute that code at a time. It uses locks to achieve this. When a thread enters a synchronized block, it acquires a lock, and when it exits, it releases the lock.
+
+Use Case: Used to protect critical sections of code where multiple threads might access shared resources.
+
+Limitations:
+* Can lead to performance overhead due to lock contention.
+* Can cause deadlocks if not used carefully.
+  
+Example:
+```java
+class SynchronizedExample {
+    private int count = 0;
+
+    public synchronized void increment() {
+        count++;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        SynchronizedExample example = new SynchronizedExample();
+
+        Thread t1 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                example.increment();
+            }
+        });
+
+        Thread t2 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                example.increment();
+            }
+        });
+
+        t1.start();
+        t2.start();
+
+        t1.join();
+        t2.join();
+
+        System.out.println("Count: " + example.getCount()); // Output: Count: 2000
+    }
+}
+```
