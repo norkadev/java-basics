@@ -19,7 +19,7 @@ class User {
 }
 ```
 Good example:
-
+```java
 class User {
     public void createUser(String name, String email) {
         // Logic to create a user
@@ -30,13 +30,13 @@ class EmailService {
         // Logic to send an email
     }
 }
-
+```
 In the improved example, User is only responsible for user creation, and EmailService is responsible for sending emails.
 
 ** 2.Open/Closed Principle (OCP) Software entities (classes, modules, functions, etc.) should be open for extension but closed for modification.**
 
 Bad example:
-
+```java
 class Rectangle {
     public double width;
     public double height;
@@ -56,9 +56,9 @@ class AreaCalculator {
         return 0;
     }
 }
-
+```
 Good example:
-
+```java
 interface Shape {
     double calculateArea();
 }
@@ -84,13 +84,13 @@ class AreaCalculator {
         return shape.calculateArea();
     }
 }
-
+```
 The AreaCalculator now depends on an abstraction (Shape) and can work with any class that implements the Shape interface without modification.
 
 **3.Liskov Substitution Principle (LSP) Subtypes must be substitutable for their base types without altering the correctness of the program.
 
 Bad example:
-
+```java
 class Bird {
     public void fly() {
         System.out.println("Bird is flying");
@@ -102,9 +102,9 @@ class Ostrich extends Bird {
         throw new UnsupportedOperationException("Ostrich cannot fly");
     }
 }
-
+```
 Good example:
-
+```java
 class Bird {
     public void eat() {
         System.out.println("Bird is eating");
@@ -118,13 +118,13 @@ class FlyingBird extends Bird {
 class Ostrich extends Bird {
     // Ostriches eat, but they don't fly
 }
-
+```
 Instead of forcing Ostrich to implement a fly method that it cannot fulfill, the hierarchy is adjusted to separate flying and non-flying birds.
 
 **4. Interface Segregation Principle (ISP) A client should not be forced to depend on methods it does not use.
 
 Bad example:
-
+```java
 interface Worker {
     void work();
     void eat();
@@ -152,9 +152,9 @@ class Robot implements Worker {
         throw new UnsupportedOperationException("Robot cannot eat");
     }
 }
-
+```
 Good example:
-
+```java
 interface Workable {
     void work();
 }
@@ -180,13 +180,13 @@ class Robot implements Workable {
         System.out.println("Robot is working");
     }
 }
-
+```
 The Worker interface is split into Workable and Eatable, allowing Robot to implement only the Workable interface.
 
 **5. Dependency Inversion Principle (DIP) High-level modules should not depend on low-level modules. Both should depend on abstractions. Abstractions should not depend on details. Details should depend on abstractions.**
 
 Bad example:
-
+```java
 class LightBulb {
     public void turnOn() {
         System.out.println("LightBulb is on");
@@ -207,9 +207,9 @@ class Switch {
         bulb.turnOn();
     }
 }
-
+```
 Good example:
-
+```java
 interface Switchable {
     void turnOn();
     void turnOff();
@@ -236,5 +236,5 @@ class Switch {
         device.turnOn();
     }
 }
-
+```
 The Switch class depends on the Switchable abstraction, not the concrete LightBulb class.
