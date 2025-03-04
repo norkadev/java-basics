@@ -1,5 +1,6 @@
 # Java  Basics
- Basic java concepts with examples
+ Basic java concepts with examples.
+ 
 
  # SOLID Principle
 The SOLID principles are a set of five design principles intended to make software designs more understandable, flexible, and maintainable. Here's an explanation of each principle with Java examples:
@@ -241,9 +242,9 @@ The Switch class depends on the Switchable abstraction, not the concrete LightBu
 # Order of execution of Initialization blocks and Constructors in Java.
 In Java, the order of execution for initialization blocks and constructors is as follows:
 
-1. Static Initialization Blocks: These are executed only once when the class is first loaded into memory. They are used to initialize static variables.
-2. Instance Initialization Blocks: These are executed every time an object of the class is created, before the constructor.
-3. Constructors: These are executed after the instance initialization blocks, and they are used to initialize the object's state.
+1. **Static Initialization Blocks:** These are executed only once when the class is first loaded into memory. They are used to initialize static variables.
+2.** Instance Initialization Blocks:** These are executed every time an object of the class is created, before the constructor.
+3. **Constructors**: These are executed after the instance initialization blocks, and they are used to initialize the object's state.
 Here's an example to illustrate this:
  ```java
 class MyClass {
