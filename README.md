@@ -426,5 +426,152 @@ Local variables from the enclosing scope must be final or effectively final to b
 
 Class-level variables (fields) can be accessed and modified without being final or effectively final.
 
+# Anonymous Class
+
+An anonymous class in Java is a class that is defined and instantiated in a single statement without being explicitly declared with a name. It's often used to create short, one-off implementations of interfaces or abstract classes. Anonymous classes are useful when you need to override methods of a class or implement an interface quickly, without the overhead of creating a named class.
+
+**Key Characteristics**
+
+No Name: Anonymous classes don't have a name.
+
+Single Use: They are typically used only once in the code where they are defined.
+
+Declaration and Instantiation: They are declared and instantiated at the same time using the new keyword.
+
+Extends or Implements: They either extend an existing class or implement an interface.
+
+Enclosing Scope: They have access to the enclosing scope, similar to lambda expressions, but with slightly different rules.
+
+**Examples**
+
+1. Implementing a Simple Interface
+```java
+package org.example;
+
+interface Operation {
+    int perform(int a, int b);
+}
+```
+```java
+package org.example;
+
+public class Main {
+    public static void main(String[] args) {
+        Solution sol = new Solution();
+        int result = sol.calculate(5, 3, new Operation() {
+            @Override
+            public int perform(int a, int b) {
+                return a + b;
+            }
+        });
+        System.out.println("Result: " + result);
+    }
+}
+
+class Solution {
+    public int solution(int N) {
+        // some logic here
+        return N * 2;
+    }
+
+    public int calculate(int a, int b, Operation operation) {
+        return operation.perform(a, b);
+    }
+}
+```
+2. Extending an Abstract Class
+```java
+package org.example;
+
+abstract class AbstractCalculator {
+    public abstract int calculate(int a, int b);
+
+    public void printResult(int result) {
+        System.out.println("Result: " + result);
+    }
+}
+```
+```java
+package org.example;
+
+public class Main {
+    public static void main(String[] args) {
+        AbstractCalculator multiplier = new AbstractCalculator() {
+            @Override
+            public int calculate(int a, int b) {
+                return a * b;
+            }
+        };
+
+        multiplier.printResult(multiplier.calculate(5, 4)); // Output: Result: 20
+    }
+}
+```
+# Abstract Class
+An abstract class in Java is a class that cannot be instantiated directly, meaning you cannot create objects of an abstract class. It serves as a blueprint for other classes and is designed to be subclassed. Abstract classes can contain both abstract methods (methods without implementation) and concrete methods (methods with implementation).
+
+**Key Characteristics**
+
+**Cannot be Instantiated:** You cannot create an object of an abstract class using the new keyword.
+
+**Abstract Methods:** Abstract classes may contain abstract methods, which are declared without an implementation. Subclasses must provide implementations for these methods unless the subclass is also abstract.
+
+**Concrete Methods:** Abstract classes can also contain concrete methods, which have implementations. These methods are inherited by subclasses and can be overridden.
+abstract Keyword: Abstract classes are declared using the abstract keyword.
+
+**Constructor:** Abstract classes can have constructors, which are called when a subclass is instantiated.
+
+**Purpose:** They are used to define a common interface for a set of related classes.
+
+**Example**
+```java
+abstract class MyAbstractClass {
+    // Abstract method (no implementation)
+    abstract void myAbstractMethod();
+
+    // Concrete method (with implementation)
+    void myConcreteMethod() {
+        System.out.println("This is a concrete method.");
+    }
+
+    // Constructor
+    public MyAbstractClass() {
+        System.out.println("Abstract class constructor.");
+    }
+}
+
+class MyConcreteClass extends MyAbstractClass {
+    @Override
+    void myAbstractMethod() {
+        System.out.println("Implementation of myAbstractMethod in MyConcreteClass.");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        MyConcreteClass obj = new MyConcreteClass();
+        obj.myAbstractMethod();   // Output: Implementation of myAbstractMethod in MyConcreteClass.
+        obj.myConcreteMethod();   // Output: This is a concrete method.
+    }
+}
+```
+# When to use Lambdas and when to use Anonymous Classes?
+**Use Lambda Expressions:**
+
+* For implementing functional interfaces.
+
+* For simple, single-method implementations.
+
+* When conciseness and readability are important.
+  
+**Use Anonymous Classes:**
+
+* For implementing interfaces or extending classes with multiple methods.
+  
+* When you need to maintain state within the implementation.
+
+* For compatibility with older codebases.
+  
+In most modern Java development, lambda expressions are generally preferred for simple, single-method implementations due to their conciseness and readability. However, anonymous classes still have their place in more complex scenarios.
 
 
